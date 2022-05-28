@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{d9b4fd81-f31a-4d17-8907-b348263fe2a9}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Buffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\ComBuffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufDev.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufferBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufferManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Provider\BufProviderBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBufCopyParam.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBufDev.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBufManager.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBufProvider.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Util\ConcurrentPipe.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Util\CycleBuffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Util\SimpleBufferPool.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\ComDataExchange.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\DistributeModuleComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributionCenter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributionContainer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributeContainer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributeConsumer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributeMember.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributeProducer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributionCenter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IProductContainer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\ModuleCommon\ComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDef\ComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBuf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Provider\CpuBufProvider.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDef\Errors\CustomErrors.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\ComModule.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModulePreset\TestModule.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Interface\IModule.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\ModuleCommon\ComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\ComWorker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Interface\IDispatchable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ModuleWorker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Interface\IWorker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Interface\IWorkerParam.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\ModuleComDef\ComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ThreadWorker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\TypeUtil\TypeCheckUtil.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\TypeUtil\TypeUtils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributeProductor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributeConsumer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\argparse\argparse.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\MiscUtil\MiscUtil.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\AndroidAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\ColorConsoleAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\ConsoleAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\DebugOutputAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\EventLogAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\IAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\RollingFileAppender.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Converters\NativeEOLConverter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Converters\UTF8Converter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Formatters\CsvFormatter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Formatters\FuncMessageFormatter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Formatters\MessageOnlyFormatter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Formatters\TxtFormatter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Init.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Initializers\RollingFileInitializer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Log.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Logger.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Record.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Severity.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Util.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\WinApi.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\Singleton\Singleton.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\StringUtils\StringUtil.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\ThreadPool\thread_pool.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)LibHelp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)LibTest\TestDataDistribute.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\ModuleDispatcher.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\WorkerParamBase.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\Module.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleManagerCenter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)LibTest\TestComWorker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Buffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufDev.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufferBase.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\BufferManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Provider\BufProviderBase.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Provider\CpuBufProvider.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Util\SimpleBufferPool.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributionCenter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModulePreset\TestModule.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ModuleWorker.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ThreadWorker.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)LibTest\TestDataDistribute.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\ModuleDispatcher.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\WorkerParamBase.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\Module.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleManagerCenter.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)LibTest\TestComWorker.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)ComModel\模块说明.md" />
+  </ItemGroup>
+</Project>
