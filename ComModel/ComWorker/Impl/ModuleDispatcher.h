@@ -12,6 +12,7 @@
 // module headers
 #include "WorkerParamBase.h"
 #include "Preset/ModuleWorker.h"
+#include "Preset/ThreadWorker.h" // 单独运行
 #include "../Interface/IDispatchable.h"
 
 namespace MdLib {
@@ -105,7 +106,7 @@ namespace MdLib {
 	};
 
 
-	class ModuleDispatcher : public Singleton<ModuleDispatcher>
+	class ModuleDispatcher : public Singleton<ModuleDispatcher>,protected ThreadWorkerBase
 	{
 		friend class Singleton<ModuleDispatcher>;
 
@@ -136,12 +137,50 @@ namespace MdLib {
 		std::mutex _dispatcherMtx;
 		bool _runFlag;
 
+	protected:
+		bool _ApplyDependentWorker(std::shared_ptr<DependentDispatchObject> worker) {
+			if (_allDependentWorker.size() >= _maxDependentWorkerCnt) {
+				return false;
+			}
+			
+			_allDependentWorker.emplace_back(worker);
+
+			return true;
+		}
+
+		bool _ApplyIndependetWorker(std::shared_ptr<IndependentDispatchObject> worker) {
+			if (worker->StartAsync()) {
+				_allInDependentWorker.emplace_back(worker);
+				return true;
+			}
+			return false;
+		}
+
+	protected:
+		// 通过 ThreadWorkerBase 继承
+		virtual void DoProcessOnce() override;
+
+		virtual void OnProcessStop() override;
+
+		virtual void OnProcessStart() override;
+
+		virtual std::string What() override;
+
 	public:
 		bool Init(int maxIndepThreadCnt, int maxDepThdCnt, int maxDepWorkerCnt);
+
+		bool StartWorker(std::string moduleName, WorkerType dispatchType, IModuleParam* mdParam);
+
+		bool DispatchWorker(std::shared_ptr<IWorker> worker, WorkerType dispatchType);
 
 		bool StopAll();
 
 		void WaitAllTask();
+
+		// 测试代码 完成后删除
+		void TestStart() {
+			StartProcessAsync();
+		}
 	};
 }
 

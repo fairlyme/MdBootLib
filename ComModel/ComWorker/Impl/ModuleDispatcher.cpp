@@ -8,6 +8,25 @@ namespace MdLib {
     {
     }
 
+    void ModuleDispatcher::OnProcessStart()
+    {
+    }
+
+    void ModuleDispatcher::DoProcessOnce()
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        printf("ModuleDispatcher working \n");
+    }
+
+    void ModuleDispatcher::OnProcessStop()
+    {
+    }
+
+
+    std::string ModuleDispatcher::What()
+    {
+        return std::string();
+    }
 
     bool ModuleDispatcher::Init(int maxIndepThreadCnt, int maxDepThdCnt, int maxDepWorkerCnt) {
         if (_threadPool == nullptr) {
@@ -21,12 +40,34 @@ namespace MdLib {
         }
     }
 
+    bool ModuleDispatcher::StartWorker(std::string moduleName, WorkerType dispatchType, IModuleParam* mdParam)
+    {
+        // 创建module
+        auto md = ModuleManagerCenter::getInstance().CreateModule(moduleName, mdParam);
+
+        if (md == nullptr) {
+            return false;
+        }
+
+        // 构造ModuleWorker
+        ModuleWorker* worker = new ModuleWorker(std::shared_ptr<IModule>(md));
+
+
+        return DispatchWorker(std::shared_ptr<IWorker>((IWorker*)worker), dispatchType);
+    }
+
+    bool ModuleDispatcher::DispatchWorker(std::shared_ptr<IWorker> worker, WorkerType dispatchType)
+    {
+        if (dispatchType == WorkerType::E_Dependent) {
+            
+        }
+    }
 
     bool ModuleDispatcher::StopAll()
     {
         _allFinish = true;
-
         _allFinishCv.notify_all();
+        StopProcess();
         return true;
     }
 

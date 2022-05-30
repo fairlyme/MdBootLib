@@ -4,24 +4,16 @@
 #include <cxxabi.h>
 
 // lib headers
-
+#include "../../Utils/TypeUtil/TypeCheckUtil.h"
 
 // module headers
 #include "../Interface/IModule.h"
 
 namespace MdLib {
-	class IModuleParam {
-	public:
-		virtual std::string ModuleName() = 0;
+	class ModuleParam : public IModuleParam{
+
 	};
 
-	class IModule {
-	public:
-		// Ä£¿éÃû³Æ
-		virtual std::string ModuleName() = 0;
-		// 
-		virtual bool InitByModuleParam(IModuleParam* param) = 0;
-	};
 
 	template<class ModuleParamType>
 	class Module : public IModule
@@ -31,6 +23,7 @@ namespace MdLib {
 	public:
 		Module()
 		{
+			TypeCheckUtil::AssertIsDelivedType<IModuleParam, ModuleParamType>();
 			_moduleName = abi::__cxa_demangle(typeid(*this).name(), 0, 0, 0);
 		}
 

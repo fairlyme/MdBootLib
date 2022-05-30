@@ -9,7 +9,6 @@
 #include "../../../ComDef/Errors/CustomErrors.h"
 
 // module headers
-#include "../Worker.h"
 #include "../../Interface/IWorker.h"
 
 namespace MdLib {
@@ -47,6 +46,8 @@ namespace MdLib {
 	class ThreadWorker : public ThreadWorkerBase{
 	private:
 		std::shared_ptr<IWorker> _workerInvokeObj;
+
+	protected:
 
 	public:
 		ThreadWorker(std::shared_ptr<IWorker> workerInvokeObj);

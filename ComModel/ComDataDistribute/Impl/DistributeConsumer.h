@@ -9,6 +9,8 @@ namespace MdLib {
 		bool _isEnable = false;
 		std::string _productKey;
 		std::shared_ptr<IDistributeContainer<DataType>> _container;
+	protected:
+		bool TryTakeProduct(std::shared_ptr<DataType>& item);
 
 	public:
 		DistributeConsumer(std::string productKey);
@@ -30,6 +32,11 @@ namespace MdLib {
 		: _productKey(productKey)
 	{
 
+	}
+
+	template<class DataType>
+	inline bool DistributeConsumer<DataType>::TryTakeProduct(std::shared_ptr<DataType>& item) {
+		return _container->Take(item);
 	}
 
 	template<class DataType>
