@@ -1,0 +1,3 @@
+[submodule "ExternalDep/configor"]
+	path = ExternalDep/configor
+	url = https://github.com/Nomango/configor.git
