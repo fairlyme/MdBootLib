@@ -29,6 +29,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Util\SimpleBufferPool.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\ComDataExchange.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\DistributeModuleComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\VDistributeMember.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributionCenter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributionContainer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributeContainer.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IDistributionCenter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Interface\IProductContainer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\ModuleCommon\ComDef.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDef\ComBase\ISummariable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDef\ComDef.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Interface\IBuf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Provider\CpuBufProvider.h" />
@@ -57,8 +59,22 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\TypeUtil\TypeUtils.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributeProductor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Impl\DistributeConsumer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\argparse\argparse.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\MiscUtil\MiscUtil.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\DispatchableObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\DependentDispatchObject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_basic.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_conversion.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_declare.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_encoding.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_exception.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_iterator.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_parser.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_serializer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_stream.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_token.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\configor_value.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\configor\include\configor\json.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\AndroidAppender.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\ColorConsoleAppender.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\plog\Appenders\ConsoleAppender.h" />
@@ -83,6 +99,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\Singleton\Singleton.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\Utils\StringUtils\StringUtil.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExternalDep\ThreadPool\thread_pool.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\IndependentDispatchObject.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LibHelp.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LibTest\TestDataDistribute.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\ModuleDispatcher.h" />
@@ -90,6 +107,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\Module.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleManagerCenter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)LibTest\TestComWorker.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleParam.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Presets\Modules\SummaryConsumer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComBuffer\Impl\Buffer.cpp" />
@@ -103,14 +122,19 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModulePreset\TestModule.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ModuleWorker.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\Preset\ThreadWorker.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\DispatchableObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\DependentDispatchObject.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\IndependentDispatchObject.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)LibTest\TestDataDistribute.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\ModuleDispatcher.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Impl\WorkerParamBase.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\Module.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleManagerCenter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)LibTest\TestComWorker.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ComModel\ComModule\Impl\ModuleParam.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)ComModel\模块说明.md" />
+    <None Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Doc\分发容器注册.md" />
+    <None Include="$(MSBuildThisFileDirectory)ComModel\ComDataDistribute\Doc\数据分发.md" />
+    <None Include="$(MSBuildThisFileDirectory)ComModel\ComWorker\Doc\调度.md" />
   </ItemGroup>
 </Project>

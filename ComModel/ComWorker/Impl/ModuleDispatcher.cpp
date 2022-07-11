@@ -3,6 +3,8 @@
 #include "Preset/ModuleWorker.h"
 #include <future>
 
+#include <ExternalDep/plog/Log.h>
+
 namespace MdLib {
     ModuleDispatcher::ModuleDispatcher()
     {
@@ -12,16 +14,42 @@ namespace MdLib {
     {
     }
 
+    bool ModuleDispatcher::CanProcess() {
+        return true;
+    }
+
+    bool ModuleDispatcher::IsProcessAllDone() {
+        return false;
+    }
+
+    bool ModuleDispatcher::_ApplyDependentWorker(std::shared_ptr<DependentDispatchObject> worker) {
+        if (_allDependentWorker.size() >= _maxDependentWorkerCnt) {
+            return false;
+        }
+
+        _allDependentWorker.emplace_back(worker);
+
+        return true;
+    }
+
+    bool ModuleDispatcher::_ApplyIndependetWorker(std::shared_ptr<IndependentDispatchObject> worker) {
+        if (worker->StartAsync()) {
+            _allInDependentWorker.emplace_back(worker);
+            return true;
+        }
+        return false;
+    }
+
     void ModuleDispatcher::DoProcessOnce()
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        printf("ModuleDispatcher working \n");
+        printf("current dependent worker count : %d \n", _allDependentWorker.size());
+        printf("current independent worker count : %d \n", _allInDependentWorker.size());
     }
 
     void ModuleDispatcher::OnProcessStop()
     {
     }
-
 
     std::string ModuleDispatcher::What()
     {
@@ -56,10 +84,54 @@ namespace MdLib {
         return DispatchWorker(std::shared_ptr<IWorker>((IWorker*)worker), dispatchType);
     }
 
+    bool ModuleDispatcher::StartWorker(configor::json& configJsonObj)
+    {
+        // 获取所有参数 dispatch type,
+        WorkerType workType = WorkerType::E_UNKNOWN;
+        configor::json jsonObj = configJsonObj["RunType"];
+        if (jsonObj.is_string()) {
+            std::string typeOriStr = jsonObj.as_string();
+            std::string typeStr = StringUtil::ToLower(typeOriStr);
+            if (typeStr == "dependent") {
+                workType = WorkerType::E_Dependent;
+            }
+            else if (typeStr == "independent") {
+                workType = WorkerType::E_Independent;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+
+        std::shared_ptr<IModule> md = ModuleManagerCenter::getInstance().CreateModule(&configJsonObj);
+
+        if (md == nullptr) {
+            return false;
+        }
+
+        // 构造ModuleWorker
+        ModuleWorker* worker = new ModuleWorker(std::shared_ptr<IModule>(md));
+
+        return DispatchWorker(std::shared_ptr<IWorker>((IWorker*)worker), workType);
+    }
+
     bool ModuleDispatcher::DispatchWorker(std::shared_ptr<IWorker> worker, WorkerType dispatchType)
     {
         if (dispatchType == WorkerType::E_Dependent) {
-            
+            return _ApplyDependentWorker(std::make_shared<DependentDispatchObject>(worker));
+        }
+        else if (dispatchType == WorkerType::E_Independent) {
+            return _ApplyIndependetWorker(std::make_shared<IndependentDispatchObject>(worker));
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -67,6 +139,15 @@ namespace MdLib {
     {
         _allFinish = true;
         _allFinishCv.notify_all();
+
+        for (auto indepItem : _allInDependentWorker) {
+            indepItem->Stop(false);
+        }
+
+        for (auto indepItem : _allInDependentWorker) {
+            indepItem->Join();
+        }
+
         StopProcess();
         return true;
     }
@@ -79,86 +160,5 @@ namespace MdLib {
 
             _allFinishCv.wait(lk);
         }
-    }
-
-    DispatchableObject::DispatchableObject(IWorker* workerInvokeObjRawPtr)
-    {
-        _iWorkerInvoke = std::shared_ptr<IWorker>(workerInvokeObjRawPtr, [](IWorker* ptr) {});
-    }
-
-    DispatchableObject::DispatchableObject(std::shared_ptr<IWorker> wokerInvokeObj)
-        :_iWorkerInvoke(wokerInvokeObj)
-    {
-
-    }
-
-    DispatchableObject::~DispatchableObject() {
-
-    }
-
-    /// <summary>
-    /// 获取包装的对象
-    /// </summary>
-    /// <returns></returns>
-    IWorker* DispatchableObject::GetWorker() {
-        return _iWorkerInvoke.get();
-    }
-
-    DependentDispatchObject::DependentDispatchObject(IWorker* workerInvokeObjRawPtr)
-        : DispatchableObject(workerInvokeObjRawPtr)
-    {
-    }
-
-    DependentDispatchObject::DependentDispatchObject(std::shared_ptr<IWorker> wokerInvokeObj) : DispatchableObject(wokerInvokeObj) {
-
-    }
-
-    bool DependentDispatchObject::TryPlan() {
-        if (IsPlaned()) {
-            return false;
-        }
-        else
-        {
-            std::lock_guard<std::mutex> guard(_stateMtx);
-            if (IsPlaned()) {
-                _isPlaned = true;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
-
-    // 是否已经计划
-
-    bool DependentDispatchObject::IsPlaned() { return _isPlaned; }
-
-    // 是否正在运行中
-
-    bool DependentDispatchObject::IsWorking() { return _isRunning; }
-
-    void DependentDispatchObject::OnPreProcess() {
-        DispatchableObject::OnPreProcess();
-
-        std::lock_guard guard(_stateMtx);
-        _isPlaned = false;
-        _isRunning = true;
-        _runFlag = true;
-    }
-
-    void DependentDispatchObject::OnFinishProcess() {
-        DispatchableObject::OnFinishProcess();
-
-        std::lock_guard guard(_stateMtx);
-        _isRunning = false;
-    }
-
-    IndependentDispatchObject::IndependentDispatchObject(IWorker* workerInvokeObjRawPtr) : DispatchableObject(workerInvokeObjRawPtr) {
-    }
-
-    IndependentDispatchObject::IndependentDispatchObject(std::shared_ptr<IWorker> wokerInvokeObj) : DispatchableObject(wokerInvokeObj) {
-
     }
 }

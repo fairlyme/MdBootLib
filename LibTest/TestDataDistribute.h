@@ -24,7 +24,7 @@ private:
 
 
 public:
-	TestProcuder() :MdLib::DistributeProductor<TestData>("TestData") {}
+	TestProcuder() :MdLib::DistributeProductor<TestData>("TestProcuder", "TestData") {}
 
 	void ProduceOne() {
 		if (!HasContainer()) {
@@ -52,24 +52,16 @@ private:
 
 public:
 	TestConsumer() 
-		: MdLib::DistributeConsumer<TestData>("TestData"){
+		: MdLib::DistributeConsumer<TestData>("DistributeConsumer", "TestData") {
 		
 	}
+	virtual bool Consume(TestData* product) override {
+		printf("sucess take %s \n", product->What().c_str());
+		return true;
+	}
 
-	void Consume() {
-		if (!HasContainer()) {
-			return;
-		}
-
-		std::shared_ptr<TestData> item;
-		if (GetDistributeContainer()->Take(item)) {
-			printf("sucess take %s \n", item->What().c_str());
-		}
-		else
-		{
-			printf("take item failed \n");
-		}
-		
+	virtual bool IsConsumeDone() {
+		return false;
 	}
 };
 

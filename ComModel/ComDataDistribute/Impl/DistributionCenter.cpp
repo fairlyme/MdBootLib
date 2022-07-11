@@ -33,6 +33,10 @@ namespace MdLib {
 			return false;
 		}
 
+		if (container == nullptr) {
+			container = producer->GetContainer();
+		}
+
 		std::string productKey = container->GetProductKey();
 		
 		// 验证是否已存在
@@ -105,9 +109,19 @@ namespace MdLib {
 
 	// 注销生产者
 	bool DistributionCenter::DeRegistProducer(std::shared_ptr<IDistributeMember> producer) {
+		return DeRegistProducer(producer.get());
+	}
+
+	// 注销消费者
+	bool DistributionCenter::DeRegistConsumer(std::shared_ptr<IDistributeMember> consumer) {
+		return DeRegistConsumer(consumer.get());
+	}
+
+	bool DistributionCenter::DeRegistProducer(IDistributeMember* producer)
+	{
 		bool finded = false;
 		for (auto it = _producers.begin(); it != _producers.end(); it++) {
-			if (it->get() == producer.get()) {
+			if (it->get() == producer) {
 				std::lock_guard guard(_producterMtx);
 				producer->ReplaceContainer(nullptr);
 				_producers.erase(it);
@@ -123,11 +137,11 @@ namespace MdLib {
 		return false;
 	}
 
-	// 注销消费者
-	bool DistributionCenter::DeRegistConsumer(std::shared_ptr<IDistributeMember> consumer) {
+	bool DistributionCenter::DeRegistConsumer(IDistributeMember* consumer)
+	{
 		bool finded = false;
 		for (auto it = _consumers.begin(); it != _consumers.end(); it++) {
-			if (it->get() == consumer.get()) {
+			if (it->get() == consumer) {
 				std::lock_guard guard(_consumerMtx);
 				consumer->ReplaceContainer(nullptr);
 				_consumers.erase(it);

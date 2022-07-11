@@ -9,8 +9,8 @@ void TestDataDistribution() {
 
     // 构建生产者
     TestProcuder *producer = new TestProcuder();
-    std::shared_ptr<MdLib::IDistributeProducer<TestData>> producersPtr 
-        = std::shared_ptr<MdLib::IDistributeProducer<TestData>>((MdLib::IDistributeProducer<TestData>*)producer);
+    std::shared_ptr<MdLib::IDistributeProductor<TestData>> producersPtr 
+        = std::shared_ptr<MdLib::IDistributeProductor<TestData>>((MdLib::IDistributeProductor<TestData>*)producer);
 
     // 注册生产着
     assert(center.RegistDistributeProducer<TestData>(producersPtr));
@@ -28,10 +28,10 @@ void TestDataDistribution() {
 
     // 生产消费测试
     producer->ProduceOne();
-    consumer->Consume();
-    consumer->Consume();
+    consumer->DoConsume();
+    consumer->DoConsume();
     producer->ProduceOne();
-    consumer->Consume();
+    consumer->DoConsume();
 
     int maxSize = producer->GetContainer()->GetMaxSize();
     // 满配生产
@@ -42,12 +42,12 @@ void TestDataDistribution() {
 
     for (size_t i = 0; i <= maxSize; i++)
     {
-        consumer->Consume();
+        consumer->DoConsume();
     }
 
     // 
     ret = center.DeRegistDistributeConsumer<TestData>(consumerPtr);
     assert(ret);
-    consumer->Consume();
+    consumer->DoConsume();
     return;
 }

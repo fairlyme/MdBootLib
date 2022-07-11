@@ -2,10 +2,8 @@
 // sys headers
 #include <vector>
 #include <condition_variable>
-#include <mutex>
 
 // lib headers 
-#include "../ModuleComDef/ComDef.h"
 #include "../../../ExternalDep/Singleton/Singleton.h"
 #include "../../../ExternalDep/ThreadPool/thread_pool.hpp"
 
@@ -13,98 +11,10 @@
 #include "WorkerParamBase.h"
 #include "Preset/ModuleWorker.h"
 #include "Preset/ThreadWorker.h" // 单独运行
-#include "../Interface/IDispatchable.h"
+#include "DependentDispatchObject.h"
+#include "IndependentDispatchObject.h"
 
 namespace MdLib {
-	/// <summary>
-	/// dispatch able obj
-	/// </summary>
-	class DispatchableObject : public IDispatchableObj {
-		friend class ModuleDispatcher;
-
-	protected:
-		bool _managed = false;
-		std::shared_ptr<IWorker> _iWorkerInvoke;
-
-	protected:
-		DispatchableObject(IWorker* workerInvokeObjRawPtr);
-
-	public:
-		DispatchableObject(std::shared_ptr<IWorker> wokerInvokeObj);
-
-		~DispatchableObject();
-
-		/// <summary>
-		/// 获取包装的对象
-		/// </summary>
-		/// <returns></returns>
-		virtual IWorker* GetWorker() override;
-
-		virtual void DoProcess() override {
-			OnPreProcess();
-			_iWorkerInvoke->DoProcessOnce();
-			OnFinishProcess();
-		}
-		
-		virtual void OnPreProcess() override {
-			_iWorkerInvoke->OnProcessStart();
-		} 
-
-		virtual void OnFinishProcess() override {
-			_iWorkerInvoke->OnProcessStop();
-		}
-	};
-
-	/// <summary>
-	/// 非独立线程 worker
-	///		非独立线程调度
-	///		start -> 询问是否有工作 -> Plan -> Do
-	/// </summary>
-	class DependentDispatchObject : public DispatchableObject, public IDependent {
-	private:
-		std::mutex _stateMtx;
-		bool _isPlaned = false;
-		bool _runFlag = false;
-		bool _isRunning = false;
-
-	protected:
-		DependentDispatchObject(IWorker* workerInvokeObjRawPtr);
-
-	public:
-		DependentDispatchObject(std::shared_ptr<IWorker> wokerInvokeObj);
-
-		virtual bool TryPlan() override;
-		// 是否已经计划
-		virtual bool IsPlaned() override;
-		// 是否正在运行中
-		virtual bool IsWorking() override;
-
-		virtual void OnPreProcess() override;
-
-		virtual void OnFinishProcess() override;
-	};
-
-	/// <summary>
-	/// 非独立线程 worker
-	///		调度
-	///		StartAsync -> Stop
-	/// </summary>
-	class IndependentDispatchObject : public DispatchableObject, public IIndependent {
-	protected:
-		IndependentDispatchObject(IWorker* workerInvokeObjRawPtr);
-
-	public:
-		IndependentDispatchObject(std::shared_ptr<IWorker> wokerInvokeObj);
-		// 是否正在运行中
-		virtual bool IsWorking() override {}
-		// 启动 异步
-		virtual bool StartAsync() override {}
-		// 启动 同步
-		virtual bool Start() override {}
-		// 停止
-		virtual bool Stop() override {}
-	};
-
 
 	class ModuleDispatcher : public Singleton<ModuleDispatcher>,protected ThreadWorkerBase
 	{
@@ -138,23 +48,9 @@ namespace MdLib {
 		bool _runFlag;
 
 	protected:
-		bool _ApplyDependentWorker(std::shared_ptr<DependentDispatchObject> worker) {
-			if (_allDependentWorker.size() >= _maxDependentWorkerCnt) {
-				return false;
-			}
-			
-			_allDependentWorker.emplace_back(worker);
+		bool _ApplyDependentWorker(std::shared_ptr<DependentDispatchObject> worker);
 
-			return true;
-		}
-
-		bool _ApplyIndependetWorker(std::shared_ptr<IndependentDispatchObject> worker) {
-			if (worker->StartAsync()) {
-				_allInDependentWorker.emplace_back(worker);
-				return true;
-			}
-			return false;
-		}
+		bool _ApplyIndependetWorker(std::shared_ptr<IndependentDispatchObject> worker);
 
 	protected:
 		// 通过 ThreadWorkerBase 继承
@@ -164,12 +60,18 @@ namespace MdLib {
 
 		virtual void OnProcessStart() override;
 
+		virtual bool CanProcess() override;
+
+		virtual bool IsProcessAllDone() override;
+
 		virtual std::string What() override;
 
 	public:
 		bool Init(int maxIndepThreadCnt, int maxDepThdCnt, int maxDepWorkerCnt);
 
 		bool StartWorker(std::string moduleName, WorkerType dispatchType, IModuleParam* mdParam);
+
+		bool StartWorker(configor::json& configJsonObj);
 
 		bool DispatchWorker(std::shared_ptr<IWorker> worker, WorkerType dispatchType);
 

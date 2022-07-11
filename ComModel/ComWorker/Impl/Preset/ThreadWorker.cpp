@@ -13,6 +13,11 @@ namespace MdLib {
 		while (_runFlag)
 		{
 			DoProcessOnce();
+
+			if (IsProcessAllDone()) {
+				std::lock_guard<std::mutex> guard(_stateMutex);
+				_runFlag = false;
+			}
 		}
 		{
 			std::lock_guard<std::mutex> guard(_stateMutex);
@@ -104,6 +109,11 @@ namespace MdLib {
 	{
 		_workerInvokeObj->OnProcessStart();
 	}
+	
+	bool ThreadWorker::IsProcessAllDone() {
+		return _workerInvokeObj->IsProcessAllDone();
+	}
+	
 	std::string ThreadWorker::What()
 	{
 		return _workerInvokeObj->What();

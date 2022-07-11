@@ -6,3 +6,4 @@
 
 #include "Impl/Module.h"
 #include "Impl/ModuleManagerCenter.h"
+#include "Impl/ModuleParam.h"

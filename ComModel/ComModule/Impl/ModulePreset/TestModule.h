@@ -10,6 +10,11 @@ namespace MdLib {
 		virtual std::string ModuleName() {
 			return "TestModule";
 		}
+
+
+		virtual bool InitParamByJson(configor::json* jobj) {
+			return true;
+		}
 	};
 
 	class TestModule : public Module<TestModuleParam>{

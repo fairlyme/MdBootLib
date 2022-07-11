@@ -17,6 +17,9 @@ namespace MdLib {
 		virtual void DoProcessOnce() override;
 		virtual void OnProcessStop() override;
 		virtual void OnProcessStart() override;
+		virtual bool IsProcessAllDone() override;
+
+		virtual bool CanProcess() override;
 		virtual std::string What() override;
 	};
 }

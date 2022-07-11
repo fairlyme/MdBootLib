@@ -3,6 +3,14 @@
 
 namespace MdLib {
 
+#define NameOfVar(Variable) (void(Variable),#Variable)
+
+#define NameOfFunc(Function) (void(&Function),#Function)
+
+#define NameOfMethod(ClassName,Method) (void(&ClassName::Method),#Method)
+
+#define NameofType(Type) (void(sizeof(Type)),#Type)
+
     class NotImplErr : public std::logic_error
     {
     private:

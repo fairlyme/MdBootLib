@@ -15,6 +15,7 @@
 
 #include "DistributionContainer.h"
 
+#include <type_traits>
 
 
 namespace MdLib {
@@ -37,10 +38,10 @@ namespace MdLib {
 		DistributionCenter(){}
 	public:
 		template<class T>
-		bool RegistDistributeProducer(std::shared_ptr<IDistributeProducer<T>> producer);
+		bool RegistDistributeProducer(std::shared_ptr<IDistributeProductor<T>> producer);
 
 		template<class T>
-		bool DeRegistDistributeProducer(std::shared_ptr<IDistributeProducer<T>> producer);
+		bool DeRegistDistributeProducer(std::shared_ptr<IDistributeProductor<T>> producer);
 
 		template<class T>
 		bool RegistDistributeConsumer(std::shared_ptr<IDistributeConsumer<T>> consumer);
@@ -49,7 +50,7 @@ namespace MdLib {
 		bool DeRegistDistributeConsumer(std::shared_ptr<IDistributeConsumer<T>> consumer);
 
 		// 注册生产者
-		virtual bool RegistProducer(std::shared_ptr<IDistributeMember> producer, std::shared_ptr<IProductContainer> container) override;
+		virtual bool RegistProducer(std::shared_ptr<IDistributeMember> producer, std::shared_ptr<IProductContainer> container = nullptr) override;
 
 		// 注册消费者
 		virtual bool RegistConsumer(std::shared_ptr<IDistributeMember> consumer) override;
@@ -58,21 +59,28 @@ namespace MdLib {
 		virtual bool DeRegistProducer(std::shared_ptr<IDistributeMember> producer) override;
 
 		// 注销消费者
-		virtual bool DeRegistConsumer(std::shared_ptr<IDistributeMember> comsumer) override;
+		virtual bool DeRegistConsumer(std::shared_ptr<IDistributeMember> consumer) override;
+
+		// 注销生产者
+		virtual bool DeRegistProducer(IDistributeMember* producer) override;
+
+		// 注销消费者
+		virtual bool DeRegistConsumer(IDistributeMember* consumer) override;
 	};
 
 	template<class T>
-	bool DistributionCenter::RegistDistributeProducer(std::shared_ptr<IDistributeProducer<T>> producer)
+	bool DistributionCenter::RegistDistributeProducer(std::shared_ptr<IDistributeProductor<T>> producer)
 	{
-		std::string productKey = producer->GetDistributeKey();
+		// static_assert(std::is_base_of < IDistributeMember, decltype(producer.get()) );
+		std::shared_ptr<IDistributeMember> productorM = 
+			std::dynamic_pointer_cast<IDistributeMember>(producer);
+
+		std::string productKey = producer->GetProductKey();
 
 		auto containerIt = _containers.find(productKey);
 
 		if (containerIt == _containers.end()) {
-			// cretae container
-			std::shared_ptr<DistributionContainer<T>> container = std::make_shared<DistributionContainer<T>>(productKey,10);
-
-			return RegistProducer(std::dynamic_pointer_cast<IDistributeMember>(producer), std::dynamic_pointer_cast<IProductContainer>(container));
+			return RegistProducer(productorM, productorM->GetContainer());
 		}
 		else
 		{
@@ -82,7 +90,7 @@ namespace MdLib {
 
 
 	template<class T>
-	bool DistributionCenter::DeRegistDistributeProducer(std::shared_ptr<IDistributeProducer<T>> producer) {
+	bool DistributionCenter::DeRegistDistributeProducer(std::shared_ptr<IDistributeProductor<T>> producer) {
 		return DeRegistProducer(std::dynamic_pointer_cast<IDistributeMember>(producer));
 	}
 

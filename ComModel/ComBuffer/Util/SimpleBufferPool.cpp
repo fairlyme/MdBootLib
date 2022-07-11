@@ -81,7 +81,7 @@ namespace MdLib {
 	}
 
 	int BufferPoolBlock::NodeCount() {
-		return _nodes.size();
+		return (int)_nodes.size();
 	}
 
 	/// <summary>
@@ -135,7 +135,7 @@ namespace MdLib {
 			}
 		}
 
-		int id = _blocks.size();
+		size_t id = _blocks.size();
 		if (id >= _maxBlockCount) {
 			return nullptr;
 		}
@@ -284,6 +284,6 @@ namespace MdLib {
 	}
 
 	int SimpleBufferPool::BlockCount() {
-		return _blocks.size();
+		return (int)_blocks.size();
 	}
 }

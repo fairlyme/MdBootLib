@@ -59,6 +59,8 @@ namespace MdLib {
 
 		virtual void OnProcessStart() override;
 
+		virtual bool IsProcessAllDone() override;
+
 		virtual std::string What() override;
 	};
 }

@@ -6,6 +6,7 @@ namespace MdLib {
 	enum WorkerType
 	{
 		E_Dependent,
-		E_Independent
+		E_Independent,
+		E_UNKNOWN
 	};
 }

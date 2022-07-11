@@ -34,8 +34,10 @@ namespace MdLib {
         }
 
         static std::string ToLower(const std::string str) {
-            std::string ret;
-            std::transform(str.begin(), str.end(), ret.begin(), ::tolower);
+            std::string ret(str);
+            std::transform(str.begin(), str.end(), ret.begin(), [](unsigned char c) { 
+                return std::tolower(c);
+                });
 
             return ret;
         }
@@ -49,6 +51,23 @@ namespace MdLib {
                 lastPos = s.find_first_not_of(delimiters, pos);
                 pos = s.find_first_of(delimiters, lastPos);
             }
+        }
+
+        template< typename... Args >
+        static std::string StringFormat(const char* format, Args... args)
+        {
+            size_t length = std::snprintf(nullptr, 0, format, args...);
+            if (length <= 0)
+            {
+                return "";
+            }
+
+            char* buf = new char[length + 1];
+            std::snprintf(buf, length + 1, format, args...);
+
+            std::string str(buf);
+            delete[] buf;
+            return std::move(str);
         }
     };
 }

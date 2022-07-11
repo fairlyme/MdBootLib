@@ -24,10 +24,19 @@ namespace MdLib {
 		virtual void OnProcessStart() = 0;
 
 		/// <summary>
+		/// 是否能够进行处理
+		/// </summary>
+		virtual bool CanProcess() = 0;
+
+		/// <summary>
+		/// 是否所有操作已经完成,结束处理.
+		/// </summary>
+		virtual bool IsProcessAllDone() = 0;
+
+		/// <summary>
 		/// work 名称
 		/// </summary>
 		/// <returns></returns>
 		virtual std::string What() = 0;
-
 	};
 }
