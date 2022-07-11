@@ -1,3 +1,6 @@
 [submodule "ExternalDep/configor"]
 	path = ExternalDep/configor
 	url = https://github.com/Nomango/configor.git
+[submodule "ExternalDep/base64codec"]
+	path = ExternalDep/base64codec
+	url = https://github.com/tplgy/cppcodec.git
