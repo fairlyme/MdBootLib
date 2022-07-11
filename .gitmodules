@@ -4,6 +4,3 @@
 [submodule "ExternalDep/base64codec"]
 	path = ExternalDep/base64codec
 	url = https://github.com/tplgy/cppcodec.git
-[submodule "ExternalDep/hpsocket"]
-	path = ExternalDep/hpsocket
-	url = https://gitee.com/ldcsaa/HP-Socket.git
